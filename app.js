@@ -16,7 +16,7 @@ app.use(formidableMiddleware());
 const { MongoClient } = require('mongodb')
 
 
-const port = 3000
+const port = process.env.PORT || 3000
 
 
 async function main() {
