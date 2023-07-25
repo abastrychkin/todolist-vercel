@@ -14,20 +14,20 @@ app.use(cors())
 app.use(formidableMiddleware());
 
 const { MongoClient } = require('mongodb')
-const dbInfo = require('./config/dbInfo');
+
 
 const port = 3000
 
 
 async function main() {
 
-  const client = new MongoClient(dbInfo.url);
+  const client = new MongoClient(process.env.URL);
 
   try {
       // Connect to the MongoDB cluster
       await client.connect();
 
-      const db = await client.db(dbInfo.dbName);
+      const db = await client.db(process.env.DBNAME);
 
       require('./routes')(app, db);
 
