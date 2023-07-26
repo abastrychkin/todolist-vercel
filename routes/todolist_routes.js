@@ -1,7 +1,7 @@
 
 var ObjectId = require('mongodb').ObjectId; 
 
-const NOT_FOUND = "NOT_FOUND"
+const NOT_FOUND = { message:"NOT_FOUND" }
 
 module.exports = function(app, db) {
 
