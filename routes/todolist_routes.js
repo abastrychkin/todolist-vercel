@@ -24,13 +24,16 @@ module.exports = function(app, db) {
     app.post('/todolist-server/:taskId/toggle-done', async (req, res) => {
         const taskId = req.params.taskId;
         let task = NOT_FOUND;
+        let objectTaskId = 0;
         try{
-        const objectTaskId = new ObjectId(taskId);
-        let task = await getTaskById(tasksDbCollection, objectTaskId);
+            objectTaskId = new ObjectId(taskId);
+            task = await getTaskById(tasksDbCollection, objectTaskId);
+            console.log(task)
         } catch {
 
         }
 
+        
         if (task != NOT_FOUND) {
             const newDoneValue = !task.done;
 
