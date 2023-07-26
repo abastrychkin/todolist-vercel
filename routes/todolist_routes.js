@@ -1,6 +1,8 @@
 
 var ObjectId = require('mongodb').ObjectId; 
 
+const NOT_FOUND = "NOT_FOUND"
+
 module.exports = function(app, db) {
 
     const tasksDbCollection = db.collection("tasks");
@@ -21,20 +23,28 @@ module.exports = function(app, db) {
 
     app.post('/todolist-server/:taskId/toggle-done', async (req, res) => {
         const taskId = req.params.taskId;
+        let task = NOT_FOUND;
+        try{
         const objectTaskId = new ObjectId(taskId);
-
         let task = await getTaskById(tasksDbCollection, objectTaskId);
-    
-        const newDoneValue = !task.done;
+        } catch {
 
-        await tasksDbCollection.updateOne(
-            { "_id" : task._id },
-            { $set: { "done" : newDoneValue } 
-        });
-        
-        let changedTask = await getTaskById(tasksDbCollection, objectTaskId);
-        
-        res.send(changedTask);
+        }
+
+        if (task != NOT_FOUND) {
+            const newDoneValue = !task.done;
+
+            await tasksDbCollection.updateOne(
+                { "_id" : task._id },
+                { $set: { "done" : newDoneValue } 
+            });
+            
+            let changedTask = await getTaskById(tasksDbCollection, objectTaskId);
+            
+            res.send(changedTask);
+        } else {
+            res.send(task);
+        }
     })
 
 };
@@ -42,7 +52,7 @@ module.exports = function(app, db) {
 async function getTaskById(tasksDbCollection, objectTaskId) {
     try {
         let task = await tasksDbCollection.findOne({ _id: objectTaskId });
-        return task;
+        return task ? task : NOT_FOUND;
     } catch (err) {
         console.log(err);
     }
