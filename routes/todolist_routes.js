@@ -41,7 +41,8 @@ module.exports = function(app, db) {
 
 async function getTaskById(tasksDbCollection, objectTaskId) {
     try {
-        let task = await tasksDbCollection.findOne({ "_id": objectTaskId });
+        let task = await tasksDbCollection.findOne({ _id: objectTaskId });
+        return task;
     } catch (err) {
         console.log(err);
     }
