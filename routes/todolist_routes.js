@@ -28,7 +28,7 @@ module.exports = function(app, db) {
         try{
             objectTaskId = new ObjectId(taskId);
             task = await getTaskById(tasksDbCollection, objectTaskId);
-            console.log(task)
+
         } catch {
 
         }
