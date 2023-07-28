@@ -15,9 +15,7 @@ module.exports = function(app, db) {
     app.post('/todolist-server/add',async (req, res) => {
         elem = req.fields;
         elem.done = false
-
         await tasksDbCollection.insertOne(elem);
-
         res.send("OK")
     })
 
@@ -28,28 +26,23 @@ module.exports = function(app, db) {
         try{
             objectTaskId = new ObjectId(taskId);
             task = await getTaskById(tasksDbCollection, objectTaskId);
-
-        } catch {
-
+        } catch { 
         }
 
-        
         if (task != NOT_FOUND) {
             const newDoneValue = !task.done;
-
+            
             await tasksDbCollection.updateOne(
                 { "_id" : task._id },
                 { $set: { "done" : newDoneValue } 
             });
-            
+
             let changedTask = await getTaskById(tasksDbCollection, objectTaskId);
-            
             res.send(changedTask);
         } else {
             res.send(task);
         }
     })
-
 };
 
 async function getTaskById(tasksDbCollection, objectTaskId) {
